@@ -77,7 +77,10 @@ const Home = ({navigation}) => {
                 />
             <Gap height={46} />
             <View style={{paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                <Text style={styles.title}>Book Lists</Text>
+                <View>
+                    <Text style={styles.title}>Book Lists</Text>
+                    <Text style={styles.desc}>{data.length} item</Text>
+                </View>
                 <TouchableOpacity onPress={onAdd}>
                     <IconPlus />
                 </TouchableOpacity>
@@ -193,6 +196,11 @@ const styles = StyleSheet.create({
     title : {
         fontSize: 24,
         fontFamily: 'Nunito-ExtraBold',
+        color: '#0B0C13'
+    },
+    desc : {
+        fontSize: 12,
+        fontFamily: 'Nunito-Medium',
         color: '#0B0C13'
     },
     mainModal: {
