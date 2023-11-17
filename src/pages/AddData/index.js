@@ -5,6 +5,7 @@ import { Button, Gap, Input } from '../../components'
 import { launchImageLibrary } from 'react-native-image-picker'
 import Api from '../../Api'
 import { showMessage } from 'react-native-flash-message'
+import { storeData } from '../../utils/localStorage'
 
 const AddData = ({navigation}) => {
   const [judul, setJudul] = useState('')
@@ -57,15 +58,12 @@ const AddData = ({navigation}) => {
         kode_buku : kode,
         image : photo,
       }
-      console.log(data, 'cek')
       const response = await Api.addBook(data)
-      console.log(response.data, 'yes berhasil')
       success()
       setTimeout(() => {
         navigation.goBack()
     }, 1500);
     } catch (error) {
-      console.log(error, 'haha eror')
     }
   }
 
@@ -89,9 +87,9 @@ const AddData = ({navigation}) => {
       <ScrollView style={{paddingHorizontal: 20}}>
         <Input title={'Kode Buku'} value={kode} onChangeText={(value) => setKode(value)} />
         <Input title={'Judul Buku'} value={judul} onChangeText={(value) => setJudul(value)} />
-        <Input title={'Tahun Terbit'} value={tahun} onChangeText={(value) => setTahun(value)} />
         <Input title={'Nama Penerbit'} value={penerbit} onChangeText={(value) => setPenerbit(value)} />
         <Input title={'Nama Pengarang'} value={pengarang} onChangeText={(value) => setPengarang(value)} />
+        <Input title={'Tahun Terbit'} keyboardType='numeric' value={tahun} onChangeText={(value) => setTahun(value)} />
         {/* <Gap height={8} />
         <View>
           <Text style={styles.teks}>Photo</Text>

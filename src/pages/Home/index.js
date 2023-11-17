@@ -5,8 +5,6 @@ import Api from '../../Api'
 import { IconClose, IconPlus } from '../../assets'
 import { useIsFocused } from '@react-navigation/native'
 import CardModal from '../../components/CardModal'
-import database from '@react-native-firebase/database'
-import firestore from '@react-native-firebase/firestore';
 import moment from 'moment'
 import { showMessage } from 'react-native-flash-message'
 
@@ -23,19 +21,30 @@ const Home = ({navigation}) => {
     const [detail, setDetail] = useState(false)
     const [id, setId] = useState('')
     const [loading] = useState(false);
+    const [noData, setNoData] = useState(false);
+    const [isData, setIsData] = useState(false);
+    const [isErro, setIsError] = useState(false)
 
     const GetData = async () => {
         try {
             setIsLoading(true)
             const response = await Api.getBook()
-            // console.log(response.data, 'data bukus')
             setData(response.data)
-            // setIsLoading(false)
+            console.log(response.data.length)
+            if (response.data.length == 0) {
+                setNoData(true);
+            } else {
+                setIsData(true);
+            }
         } catch (error) {
             console.log(error, 'hoiu')
+            setIsError(false)
             setIsLoading(false)
+            // setData(true)
         }
     }
+
+
 
     const searchFilter = (value) => {
         if (value) {
@@ -122,6 +131,9 @@ const Home = ({navigation}) => {
 
     useEffect(() => {
         isFocused && GetData()
+        isFocused && setNoData(false);
+        isFocused && setIsData(false);
+        isFocused && setIsError(false)
     }, [isFocused])
 
     return (
@@ -147,38 +159,48 @@ const Home = ({navigation}) => {
                 <TextInput placeholder="Search by title" placeholderTextColor='#343434' style={styles.teksInput} returnKeyType='search' onChangeText={(value) => searchFilter(value)}  />
             </View>
             <Gap height={20} />
-            <ScrollView 
-                showsVerticalScrollIndicator={false} style={{paddingHorizontal: 20}}
-                refreshControl={
-                    <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+            {
+                noData &&
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{fontSize: 20, fontFamily: 'Nunito-ExtraBold', color: '#0B0C13'}}>No Data Available</Text>
+                    <Text style={{fontSize: 16, fontFamily: 'Nunito-ExtraBold', color: '#0B0C13'}}>Please Add Data</Text>
+                </View>
             }
-            >
-                {
-                    data.map(value => {
-                        const params = {
-                            id: value.id,
-                            penerbit: value.nama_penerbit,
-                            pengarang: value.nama_pengarang,
-                            judul: value.judul_buku,
-                            tahun: value.tahun_terbit,
-                            kode: value.kode_buku
-                        }
-                        return(
-                            <CardBook 
-                                key={value.id}
-                                penerbit={value.nama_penerbit}
-                                judul={value.judul_buku}
-                                tahun={value.tahun_terbit}
-                                pengarang={value.nama_pengarang}
-                                kode={value.kode_buku}
-                                onPress={() => gotoModalDetail(params)}
-                            />
-                        )
-                    })
+            {
+                isData &&
+                <ScrollView 
+                    showsVerticalScrollIndicator={false} style={{paddingHorizontal: 20}}
+                    refreshControl={
+                        <RefreshControl refreshing={loading} onRefresh={onRefresh} />
                 }
-                {/* <CardBook onPress={openModal} /> */}
-                <Gap height={20} />
-            </ScrollView>
+                >
+                    {
+                        data.map(value => {
+                            const params = {
+                                id: value.id,
+                                penerbit: value.nama_penerbit,
+                                pengarang: value.nama_pengarang,
+                                judul: value.judul_buku,
+                                tahun: value.tahun_terbit,
+                                kode: value.kode_buku
+                            }
+                            return(
+                                <CardBook 
+                                    key={value.id}
+                                    penerbit={value.nama_penerbit}
+                                    judul={value.judul_buku}
+                                    tahun={value.tahun_terbit}
+                                    pengarang={value.nama_pengarang}
+                                    kode={value.kode_buku}
+                                    onPress={() => gotoModalDetail(params)}
+                                />
+                            )
+                        })
+                    }
+                    {/* <CardBook onPress={openModal} /> */}
+                    <Gap height={20} />
+                </ScrollView>
+            }
 
             {modalVisible &&
                 <CardModal

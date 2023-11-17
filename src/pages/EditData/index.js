@@ -59,9 +59,7 @@ const EditData = ({navigation, route}) => {
         nama_pengarang : pengarangs,
         kode_buku : kodes,
       }
-      console.log(data, 'ce edit kkkk')
       const response = await Api.editBook(data, id)
-      console.log(response.data, 'yes berhasil edit')
       success()
       setTimeout(() => {
         navigation.goBack()
