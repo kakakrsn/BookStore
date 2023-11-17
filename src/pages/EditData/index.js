@@ -5,13 +5,16 @@ import { Button, Gap, Input } from '../../components'
 import { launchImageLibrary } from 'react-native-image-picker'
 import Api from '../../Api'
 import { showMessage } from 'react-native-flash-message'
+import moment from 'moment'
 
-const EditData = ({navigation}) => {
-  const [judul, setJudul] = useState('')
-  const [tahun, setTahun] = useState('')
-  const [penerbit, setPenerbit] = useState('')
-  const [pengarang, setPengarang] = useState('')
-  const [kode, setKode] = useState('')
+const EditData = ({navigation, route}) => {
+  const {id, penerbit, pengarang, judul, kode, tahun} = route.params
+  console.log(id, penerbit, pengarang, 'cssnkcs')
+  const [juduls, setJudul] = useState(judul)
+  const [tahuns, setTahun] = useState(tahun)
+  const [penerbits, setPenerbit] = useState(penerbit)
+  const [pengarangs, setPengarang] = useState(pengarang)
+  const [kodes, setKode] = useState(kode)
   const [photo, setPhoto] = useState("");
   const [modalVisibles, setmodalVisibles] = useState(false)
   const [photoDB, setPhotoDB] = useState("");
@@ -50,24 +53,15 @@ const EditData = ({navigation}) => {
   const onAdd = async () => {
     try {
       const data = {
-        judul_buku : judul,
-        tahun_terbit : tahun,
-        nama_penerbit : penerbit,
-        nama_pengarang : pengarang,
-        kode_buku : kode,
-        image : photo,
-        // judul_buku: "judul_buku 10",
-        // tahun_terbit: "tahun_terbit 10",
-        // nama_penerbit: "nama_penerbit 10",
-        // nama_pengarang: "nama_pengarang 10",
-        // // created_at: "2007-07-26T21:48:38.807Z",
-        // kode_buku: 76,
-        // image: "https://loremflickr.com/640/481",
-        // id: "1"
+        judul_buku : juduls,
+        tahun_terbit : tahuns,
+        nama_penerbit : penerbits,
+        nama_pengarang : pengarangs,
+        kode_buku : kodes,
       }
-      console.log(data, 'cek')
-      const response = await Api.addBook(data)
-      console.log(response.data, 'yes berhasil')
+      console.log(data, 'ce edit kkkk')
+      const response = await Api.editBook(data, id)
+      console.log(response.data, 'yes berhasil edit')
       success()
       setTimeout(() => {
         navigation.goBack()
@@ -95,21 +89,23 @@ const EditData = ({navigation}) => {
       </View>
       <Gap height={20} />
       <ScrollView style={{paddingHorizontal: 20}}>
-        <Input title={'Kode Buku'} value={kode} onChangeText={(value) => setKode(value)} />
-        <Input title={'Judul Buku'} value={judul} onChangeText={(value) => setJudul(value)} />
-        <Input title={'Tahun Terbit'} value={tahun} onChangeText={(value) => setTahun(value)} />
-        <Input title={'Nama Penerbit'} value={penerbit} onChangeText={(value) => setPenerbit(value)} />
-        <Input title={'Nama Pengarang'} value={pengarang} onChangeText={(value) => setPengarang(value)} />
-        <Gap height={8} />
+        <Input title={'Kode Buku'} value={kodes} onChangeText={(value) => setKode(value)} />
+        <Input title={'Judul Buku'} value={juduls} onChangeText={(value) => setJudul(value)} />
+        <Input title={'Nama Penerbit'} value={penerbits} onChangeText={(value) => setPenerbit(value)} />
+        <Input title={'Nama Pengarang'} value={pengarangs} onChangeText={(value) => setPengarang(value)} />
+        <Input title={'Tahun Terbit'} keyboardType='numeric' value={moment(tahun).format('YYYY')} onChangeText={(value) => setTahun(value)} />
+        {/* <Gap height={8} />
         <View>
           <Text style={styles.teks}>Photo</Text>
           <Gap height={4} />
           <TouchableOpacity onPress={getImageFromGalery}>
               <Image style={{ width: 100, height: 100, borderRadius: 20 }} source={photo == "" ? Profile : { uri: photo }} />
           </TouchableOpacity>
-        </View>
+        </View> */}
         <Gap height={40} />
-        <Button teks={'Login'} backColor='#243142' textColor='#FFF' onPress={onAdd} />
+        <Button teks={'Save'} backColor='#243142' textColor='#FFF' onPress={onAdd} />
+        <Gap height={10} />
+        <Button teks={'Cancel'} backColor='#FFF' textColor='#243142' onPress={() => navigation.goBack()} />
       </ScrollView>
     </SafeAreaView>
   )

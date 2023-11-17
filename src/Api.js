@@ -18,6 +18,19 @@ class Api {
             data
         })
     }
+    static editBook(data, id) {
+        let path = `book/${id}`;
+        return request(`${this.urlAPI()}${path}`, {
+            method: 'PUT',
+            data
+        })
+    }
+    static deleteBook(id) {
+        let path = `book/${id}`;
+        return request(`${this.urlAPI()}${path}`, {
+            method: 'DELETE',
+        })
+    }
 }
 
 export default Api

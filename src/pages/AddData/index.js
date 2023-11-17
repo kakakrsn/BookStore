@@ -56,14 +56,6 @@ const AddData = ({navigation}) => {
         nama_pengarang : pengarang,
         kode_buku : kode,
         image : photo,
-        // judul_buku: "judul_buku 10",
-        // tahun_terbit: "tahun_terbit 10",
-        // nama_penerbit: "nama_penerbit 10",
-        // nama_pengarang: "nama_pengarang 10",
-        // // created_at: "2007-07-26T21:48:38.807Z",
-        // kode_buku: 76,
-        // image: "https://loremflickr.com/640/481",
-        // id: "1"
       }
       console.log(data, 'cek')
       const response = await Api.addBook(data)
@@ -100,16 +92,18 @@ const AddData = ({navigation}) => {
         <Input title={'Tahun Terbit'} value={tahun} onChangeText={(value) => setTahun(value)} />
         <Input title={'Nama Penerbit'} value={penerbit} onChangeText={(value) => setPenerbit(value)} />
         <Input title={'Nama Pengarang'} value={pengarang} onChangeText={(value) => setPengarang(value)} />
-        <Gap height={8} />
+        {/* <Gap height={8} />
         <View>
           <Text style={styles.teks}>Photo</Text>
           <Gap height={4} />
           <TouchableOpacity onPress={getImageFromGalery}>
               <Image style={{ width: 100, height: 100, borderRadius: 20 }} source={photo == "" ? Profile : { uri: photo }} />
           </TouchableOpacity>
-        </View>
+        </View> */}
         <Gap height={40} />
-        <Button teks={'Login'} backColor='#243142' textColor='#FFF' onPress={onAdd} />
+        <Button teks={'Save'} backColor='#243142' textColor='#FFF' onPress={onAdd} />
+        <Gap height={10} />
+        <Button teks={'Cancel'} backColor='#FFF' textColor='#243142' onPress={() => navigation.goBack()} />
       </ScrollView>
     </SafeAreaView>
   )
